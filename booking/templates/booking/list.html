@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>My Bookings</h3>
+
+<h5 class="mt-3">Current</h5>
+<table class="table table-striped">
+  <thead><tr><th>ID</th><th>Trip</th><th>Seats</th><th>Total</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+    {% for b in current %}
+    <tr>
+      <td>{{ b.booking_id }}</td>
+      <td>{{ b.travel_option.source }} → {{ b.travel_option.destination }} ({{ b.travel_option.departure|date:"Y-m-d H:i" }})</td>
+      <td>{{ b.number_of_seats }}</td>
+      <td>₹{{ b.total_price }}</td>
+      <td>{{ b.get_status_display }}</td>
+      <td>
+        <form method="post" action="{% url 'cancel_booking' b.booking_id %}">
+          {% csrf_token %}
+          <button class="btn btn-sm btn-outline-danger">Cancel</button>
+        </form>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">No current bookings.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h5 class="mt-4">Past (Cancelled)</h5>
+<table class="table table-striped">
+  <thead><tr><th>ID</th><th>Trip</th><th>Seats</th><th>Total</th><th>Status</th></tr></thead>
+  <tbody>
+    {% for b in past %}
+    <tr>
+      <td>{{ b.booking_id }}</td>
+      <td>{{ b.travel_option.source }} → {{ b.travel_option.destination }} ({{ b.travel_option.departure|date:"Y-m-d H:i" }})</td>
+      <td>{{ b.number_of_seats }}</td>
+      <td>₹{{ b.total_price }}</td>
+      <td>{{ b.get_status_display }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No past bookings.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Find Travel</h3>
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-2">{{ form.type }}</div>
+  <div class="col-md-3"><input class="form-control" name="source" value="{{ request.GET.source }}" placeholder="Source"></div>
+  <div class="col-md-3"><input class="form-control" name="destination" value="{{ request.GET.destination }}" placeholder="Destination"></div>
+  <div class="col-md-2">{{ form.date }}</div>
+  <div class="col-md-2"><button class="btn btn-outline-primary w-100">Search</button></div>
+</form>
+
+<div class="row gy-3">
+  {% for t in travels %}
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{ t.get_type_display }}: {{ t.source }} → {{ t.destination }}</h5>
+        <p class="card-text mb-1"><strong>Departure:</strong> {{ t.departure|date:"Y-m-d H:i" }}</p>
+        <p class="card-text mb-1"><strong>Price:</strong> ₹{{ t.price }}</p>
+        <p class="card-text"><strong>Seats:</strong> {{ t.available_seats }}</p>
+        <a class="btn btn-primary" href="{% url 'travel_detail' t.id %}">View & Book</a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p>No travel options found.</p>
+  {% endfor %}
+</div>
+{% endblock %}

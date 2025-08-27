@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Cancel booking?</h3>
+<p>Are you sure you want to cancel booking <strong>{{ booking.booking_id }}</strong> for
+<strong>{{ booking.travel_option.source }} → {{ booking.travel_option.destination }}</strong>?</p>
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger">Yes, cancel</button>
+  <a href="{% url 'my_bookings' %}" class="btn btn-secondary">No</a>
+</form>
+{% endblock %}
